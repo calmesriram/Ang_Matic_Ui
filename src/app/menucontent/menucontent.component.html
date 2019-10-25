@@ -1,0 +1,126 @@
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-sm-12">
+              <form  [formGroup]="formGroup"  autocomplete="off" class="form" class="example-form">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Privatekey" (keyup)="getError('privatekey')" #privatekeyid formControlName="privatekey">
+                    <mat-error *ngIf="formGroup.controls['privatekey'].invalid">
+                      {{getError('privatekey')}}
+                    </mat-error>     
+                  </mat-form-field>
+                  <!-- <div class="form-inline"> -->
+                          <div class="form-group">
+                                  <button  type="button" mat-raised-button (click)="createnode(privatekeyid.value);" color="primary">Create Node</button>
+                          </div>     
+                       <!-- </div> -->
+                </form>
+            </div>
+            <div class="col-sm-12">
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="node hash" [(ngModel)]="getNode_hash" #hash>                      
+                  </mat-form-field>
+                  <div class="form-group">
+                      <button  type="button" mat-raised-button (click)="get_node_hash();" color="primary">Get Node Hash</button>
+                   </div>    
+                   <div class="table-responsive">
+                      <table class="table table-hover table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Zk Address</th>
+                              <th>Total</th>                      
+                              <th>Symbol</th>                              
+                            </tr>
+                          </thead>
+                          <tbody>
+                         <tr *ngFor="let data of get_address;">
+                            <td (click)="get_node_hash_copy(data.zkaddress)">{{data.zkaddress}}</td>
+                           <td>{{data.total_minted}}</td>
+                           <td>{{data.symbol}}</td>                                
+                         </tr>
+                          </tbody>
+                        </table>
+                        </div> 
+
+                   <div class="table-responsive">
+                      <table class="table table-hover table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Assert Address</th>
+                              <th>Owner</th>                      
+                              <th>Note Hash</th>
+                              <th>Symbol</th>
+                              <th>Value</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                         <tr *ngFor="let data of getNodeHash_array;">
+                            <td>{{data.assetAddress}}</td>
+                           <td>{{data.owner}}</td>
+                           <td>{{data.note_hash}}</td>
+                           <td>{{data.symbol}}</td>                           
+                           <td>{{data.value}}</td>                   
+                         </tr>
+                          </tbody>
+                          <tfoot>
+                            
+                          </tfoot>
+                        </table>
+                        </div> 
+            </div>
+            </div>
+    <div class="row">
+      <div class="col-sm-4">
+          <mat-card>
+              
+              <!-- <mat-form-field>
+                  <mat-label>Currency Type</mat-label>
+                  <mat-select [(ngModel)]="select_cur" (ngModelChange)="dpSelected();">
+                    <mat-option value="INR">INR</mat-option>
+                    <mat-option value="USD">USD</mat-option>
+                   <mat-option *ngFor="let food of foods" [value]="food.value">
+                      {{food.viewValue}}
+                    </mat-option> 
+                  </mat-select>
+                </mat-form-field>   -->
+            </mat-card>
+      </div>
+      <div class="col-sm-4">
+      
+      </div>  
+      <div class="col-sm-4">
+          <mat-card>
+              <div class="text-center"><br>
+                <mat-card-title>Total Balance</mat-card-title>
+               </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="text-center"><br>
+                  <mat-card-subtitle>INR <span>&#x20B9;</span></mat-card-subtitle>
+                  <div class="text-center">                   
+                    <!-- <div *ngFor="let tbal of get_address;">
+                     {{tbal.total_minted}}
+                    </div> -->
+                    <div *ngFor="let item of get_address1 | keyvalue;">
+                        {{item.value.symbol}}:{{item.value.total_minted}}
+                        <!-- <div *ngFor="let i of tbal.key| keyvalue;">
+                          {{ i.symbol}}
+                          </div> -->
+                       </div>
+                       <!-- {{item}}ram -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-center"><br>
+                      <mat-card-subtitle>USD <span>&#36;</span></mat-card-subtitle>
+                      <div class="text-center">
+                          <p> -- </p>
+                          </div>
+    
+                      </div>
+                </div> 
+              </div>
+            </mat-card>
+      </div>
+    </div>
+  </div>
