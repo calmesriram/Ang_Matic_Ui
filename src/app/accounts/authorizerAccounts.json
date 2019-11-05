@@ -1,0 +1,56 @@
+{
+    "walletSocket": {
+        "privateKey": "0xac071cfa36749d1a7b1b802ff0583a5f9bf1b6ef650dcd882578f2c22f135408",
+        "address": "0x7924259759c86caf163128afd3570db18925425f"
+    },
+
+    "comp1": {
+        "privateKey": "0x2eab689d3afa5aa86fe5829d2aaf7b844cc3a91a3ba84ad6397001103a635651",
+        "address": "0xcba39f71715820a3b352fe9a50d541168a1b1134",
+        "docHash": "QmephugC1zzxJH8yfMiQEFmHLSV5As3YqzWtB1hT1ThxnD"
+    },
+
+    "comp2": {
+        "privateKey": "0xef9d87c08802929afdfae7e9631fe8b3bb6e45ae0009273866c748d3d2ceca54",
+        "address": "0x6753f20c2e4811ccb763b5f13a94d13421725ad3",
+        "docHash": "QmSrwxp5w1j5PvzToHEs9qNAhLBXvcMEzjN13LCEXtENfu"
+    },
+
+    "emp1comp1": {
+        "privateKey": "0x2ac0596fbf3266a5739cc57f00744642428bd5ac89b6e56e6d7bd1a6637a7c8f",
+        "address": "0xcc6c627c8361530e733d3c007817d6aab7ce478f",
+        "docHash": "QmcbUcQUTZTDBb8iKioRSaYwaCP1rQWvmkULDXB4Fo9chm"
+    },
+
+    "indiv1": {
+        "privateKey": "0x44dd7394a155aea4aceb9337845a010b7e390b3d8f204257f45be97037d4417d",
+        "address": "0x6dcf53a80d387d960455092155a48d8c7a23d258",
+        "docHash": "QmRrRq5gsoJy2td1C787waaNmQRgAq1wwAKRWM7QT7aTDw"
+    },
+
+    "comp1new": {
+        "privateKey": "0xb1bbb1ae991c90d88337d3bb36b9c6fe2f0ea618d3c62ad54a5969ddade6ca0d",
+        "address": "0x967dc3f6b46b8fc1ca12457a2af91cfd0b1f6277",
+        "docHash": "QmcSLv1v82KmqY5nLKdp5tuPT3dsH4PffS8kote2k77Yot"
+    },
+
+    "emp1comp1new": {
+        "privateKey": "0x6934f79041a6c8e7dcde5bfd14fbad147f5c377a9351cfdf365143b69e2aa5c7",
+        "address": "0xcb0ade48cdb81d1b6aca99d5dcce7cfc45ec81ef",
+        "docHash": "Qmee28YuXmcRsUUgAZmgAJc9Vji39FMK7YWR9tR9rPva1Y"
+    },
+
+    "indiv1comp1": {
+        "privateKey": "0xad6b4451ceab34026027a2379dd4ead4eb2e89a3a5e9eedf8258c0dbc4949bc4",
+        "address": "0x2d1fd4ae81bf81ec696f993eae754ee10de2ebcf",
+        "docHash": "QmPf13t2CaAo58Y9pouvDSoR5oSCeFCwGQssVLNAvPjs5i"
+    },
+
+    "emp1comp2": {
+        "privateKey": "0x58fb4aea82d50217de3e17fa222a33b5b8a6ffa8d165d084967d395502d18be3",
+        "address": "0x4cf261864ff5defc86baa241391e2e29398b92ed",
+        "docHash": "QmZVWfz35XmwLwj4P3yoBHCH23wrDiB8BrtudU3vcqRHzx"
+    },
+
+    "mnemonic": "differ idle retire demise glare sentence glove hammer iron mango way empty"
+}

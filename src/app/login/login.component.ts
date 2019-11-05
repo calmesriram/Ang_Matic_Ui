@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../api.service';
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -50,9 +52,9 @@ export class LoginComponent implements OnInit {
     var senddata ={
       notehash:data1,
       viewingkey:data2
-    }
+    }    
     console.log(senddata,"before send")
-    this.Api.sendmsg(senddata);
+    // this.Api.sendmsg(senddata);
   }
   get(){
     this.Api.getmsg();
@@ -64,4 +66,5 @@ export class LoginComponent implements OnInit {
   //   console.log("t is clicked")
   //   this.Api.test();
   // }
+  
 }

@@ -3,38 +3,47 @@ import {HttpClient,HttpHeaders} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import * as io from 'socket.io-client'
-// var io = require('socket.io')
+import { Buffer } from 'buffer';
 declare var require:any;
-var utf8 = require('utf8');
-const { note, proof, signer } = require('aztec.js');
-//   // var importcrypt = require('cryptr');
-import Cryptr from 'cryptr';
-// const cryptr = new Cryptr('myTotalySecretKey');
-import { Buffer } from "buffer";
+var util = require('ethereumjs-util');
 
+// var myContract = artifacts.require("WalletSocket").deployed();
+const { note, proof, signer } = require('aztec.js');
+import Cryptr from 'cryptr';
 import forge from 'node-forge';
 import JSEncrypt from 'jsencrypt';
+import { resolve } from 'url';
+import { reject } from 'q';
 var Web3 = require('web3');
+
 var testneturl="https://testnet2.matic.network/";
 var web3 = new Web3(new Web3.providers.HttpProvider(testneturl));
 var jsSHA = require("jssha");
-var crypto_random_bits = 16;
 var username;
 var password;
 var myprojectkey="matic123$";
 
+const utils = require('@aztec/dev-utils');
+// let aztecAccounts = require("../app/accounts/aztecAccounts");
+
+const {
+  constants,
+  proofs: {
+    JOIN_SPLIT_PROOF,
+    MINT_PROOF,
+    BILATERAL_SWAP_PROOF,
+  },
+} = utils;
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   public socketurl:string="http://10.10.0.142:9000"
+
   Socket= io(this.socketurl)
-  public httpOptions:any;
-  // public baseurl:String="http://165.22.214.80:8000";
+  public httpOptions:any;  
   public baseurl:String="http://78.46.200.28:8000";
   public userInfo_baseurl:String="http://78.46.200.28:8000"
-  // public userInfo_baseurl:String="http://192.168.21.61:8000";
-  // public userInfo_baseurl:String="http://78.47.72.64:8000";  
   public maticpublickey:any;
   public maticprivatekey:any; 
   public loader:boolean;  
@@ -47,36 +56,129 @@ export class ApiService {
     //     'Content-Type':'application/json',
     //    'Authorization': 'Token '+localStorage.getItem('token')          
     //  })
-    // }
-
+    // }    
 this.getRouterurl()
 
    }
-sendmsg(data){
-  var myarraysenddata = [
-    {
-      "noteHash":"0x9e9ac3ae1d818a9b0ff973638e08b22bd6916b34b1d50ffca1bbb2b40196e005",
-      "viewingKey":"0x206c165748e8c7d42ad02d49fa4121c81af0bb117894c22a5c949e2b60639e570000006403576a5efebbfdc6a31de42c5782dbe85d6069c8bab85520f059a50caca4a1bc87"
-    },
-    {
-      "noteHash":"0xe9148b113d41c34aa2b933d0f9f9042a27d88a704bd72a6667a75996d19f2df6",
-      "viewingKey":"0x0c4ced68f8256a0225a1316e47c55065ad4d9d9948140208567e0a129ca584710000006402b5897d5ec6d8126e5998a3d7a1048d8e2833bd6791053fd90a751f3502e103a8"
-    },
-    {
-      "noteHash":"0xcf56b24cdc382691c25e6f45f1dd2829a6e9f8a45f1d66daf44dd4988c6f90d7",
-      "viewingKey":"0x0f322121bb96ff90506448a5f38204a5b8e238ac6cf86b12051101e3cf349a800000006402a652963c997350b9dada59c4ba6e0593593d4c019b3a699d29550092669de3d1"
-    },
-    {
-      "noteHash":"0x2d68eb6cfff1687435d21bad4254bc41288a97bf4770755f44abffb11ed42d80",
-      "viewingKey":"0x040f2bedc90bd8309f2aaef433f459b02decc388f0c8a2cb78e38fb05f76eb1e00000064026ec1ec2d8ca5577c37b0e77fdb69a9fda700533d269ee2c7540b0aaf8d8d6125"
-    }
-  ]
 
-  let obj_keys = {"output_notehash":myarraysenddata}
-  this.Socket.emit('send-notehash-viewingkey',obj_keys)
-  this.Socket.on('youres',(data:any)=>{
-    console.log(data,"from server sockert")
+   getpubkeyAndAddress(pvtkey){   
+    
+    var buf_enc = Buffer.from(pvtkey,'hex');
+    
+    let address = util.privateToAddress(buf_enc)
+    console.log(address.toString('hex'),"Address")
+    
+    let publickey = util.privateToPublic(buf_enc)
+    console.log(publickey.toString('hex'),"public key")
+   }
+// sendmsg(data){
+//   var myarraysenddata = [
+//     {
+//       "noteHash":"0x9e9ac3ae1d818a9b0ff973638e08b22bd6916b34b1d50ffca1bbb2b40196e005",
+//       "viewingKey":"0x206c165748e8c7d42ad02d49fa4121c81af0bb117894c22a5c949e2b60639e570000006403576a5efebbfdc6a31de42c5782dbe85d6069c8bab85520f059a50caca4a1bc87"
+//     },
+//     {
+//       "noteHash":"0xe9148b113d41c34aa2b933d0f9f9042a27d88a704bd72a6667a75996d19f2df6",
+//       "viewingKey":"0x0c4ced68f8256a0225a1316e47c55065ad4d9d9948140208567e0a129ca584710000006402b5897d5ec6d8126e5998a3d7a1048d8e2833bd6791053fd90a751f3502e103a8"
+//     },
+//     {
+//       "noteHash":"0xcf56b24cdc382691c25e6f45f1dd2829a6e9f8a45f1d66daf44dd4988c6f90d7",
+//       "viewingKey":"0x0f322121bb96ff90506448a5f38204a5b8e238ac6cf86b12051101e3cf349a800000006402a652963c997350b9dada59c4ba6e0593593d4c019b3a699d29550092669de3d1"
+//     },
+//     {
+//       "noteHash":"0x2d68eb6cfff1687435d21bad4254bc41288a97bf4770755f44abffb11ed42d80",
+//       "viewingKey":"0x040f2bedc90bd8309f2aaef433f459b02decc388f0c8a2cb78e38fb05f76eb1e00000064026ec1ec2d8ca5577c37b0e77fdb69a9fda700533d269ee2c7540b0aaf8d8d6125"
+//     }
+//   ]
+
+//   let obj_keys = {"output_notehash":myarraysenddata}
+//   this.Socket.emit('send-notehash-viewingkey',obj_keys)
+//   // this.Socket.on('youres',(data:any)=>{
+//   //   console.log(data,"from server sockert")
+//   // })
+// }
+signNote(validatorAddress, noteHash, spender, privateKey){
+  return new Promise((resolve,reject)=>{    
+      const domain = signer.generateZKAssetDomainParams(validatorAddress);
+      const schema = constants.eip712.NOTE_SIGNATURE;
+      const status = true;
+      const message = {
+          noteHash,
+          spender,
+          status,
+      };
+      let { signature } = signer.signTypedData(domain, schema, message, privateKey);
+      resolve(signature)
+      // return signature[0] + signature[1].slice(2) + signature[2].slice(2);  
   })
+}
+ createNote(Az_pubkey,zkAssetAddress,Az_pvtkey,old_and_req,req){
+
+   console.log(Az_pubkey,zkAssetAddress,Az_pvtkey,old_and_req,req,"api service")
+        note.create(Az_pubkey, old_and_req).then(a => {
+            console.log("a viewing key",a.getView());
+            
+        note.createZeroValueNote().then(b => {
+            console.log("b viewing key",b.getView());
+
+        note.create(Az_pubkey, req).then(c => {   
+            console.log("c viewing key",c.getView());
+        // Create a note of value 100 for this asset such that it is owned by aztecAccount[1]
+        let notes = [a,b,c]
+
+        console.log(notes,"3 data")
+
+        // Generate proof data for the minting of this note
+        console.log("hai1");
+        console.log(notes[0]);
+        console.log(notes[1]);
+        console.log(notes[2]);
+        console.log(zkAssetAddress);
+        
+         let {proofData} = proof.mint.encodeMintTransaction({
+             newTotalMinted: notes[0],
+            oldTotalMinted: notes[1],
+            adjustedNotes: [notes[2]],
+            senderAddress: zkAssetAddress
+          
+        })
+        console.log(proofData)
+        // let {proofData} = proof.mint.encodeMintTransaction({
+        //     newTotalMinted: notes[0],
+        //     oldTotalMinted: notes[1],
+        //     adjustedNotes: [notes[2]],
+        //     senderAddress: zkAssetAddress
+        // })
+        console.log("hai2");
+      //  console.log(proofData,"profDaTA")
+      //  console.log(notes[0],"node 0")
+      //  console.log(notes[1],"node 1")
+        let takerBidNote = notes[2];
+        let takerBidNoteHash = notes[2].noteHash;
+
+        // Get signatures to approve WalletSocket and ZkAssetHandler contracts to spend the note
+        let signWalletSocket = this.signNote(zkAssetAddress, takerBidNoteHash, "0x57000A801333D2F5D29F07450Ce29291C16293dB", Az_pvtkey);
+        let signZkAssetHandler = this.signNote(zkAssetAddress, takerBidNoteHash, "0x3Db45f8253daD01C43e2974eFDa6E7567080b02B", Az_pvtkey);
+
+
+        console.log(signWalletSocket,"wallet socket");
+        console.log(signZkAssetHandler,"Zkassethandler");
+        
+        
+                // res.approveNoteSpending(zkAssetAddress, takerBidNoteHash, signWalletSocket, signZkAssetHandler, proofData).then(tx =>{
+                //     console.log(tx);
+                //     console.log(tx.receipt.status, true);
+                //     console.log(tx.receipt.logs[0].event, "NoteCreated");
+                //     console.log(tx.receipt.logs[0].args.owner, aztecAccounts[1].address);
+                //     console.log(tx.receipt.logs[0].args.noteHash, takerBidNoteHash);
+                    
+                // })
+        
+                })
+            })
+        })
+
+        // Note Creation End//
 }
 getmsg(){
   this.Socket.on('youres',(data:any)=>{
@@ -243,10 +345,10 @@ public async reg(data):Promise<any>{
   sha3Obj.update(data["password"]);
   var hash2 = sha3Obj.getHash("HEX");
 
-  var encryptedpassword = crypt_module.encrypt(password,myprojectkey).toString();
-  console.log(encryptedpassword,"encode ram")
-  var decryptpassword = crypt_module.decrypt(encryptedpassword,myprojectkey).toString();
-  console.log(decryptpassword,"decrpt ram")
+  // var encryptedpassword = crypt_module.encrypt(password,myprojectkey).toString();
+  // console.log(encryptedpassword,"encode ram")
+  // var decryptpassword = crypt_module.decrypt(encryptedpassword,myprojectkey).toString();
+  // console.log(decryptpassword,"decrpt ram")
 
   let seed = btoa(forge.random.getBytes(16))
   console.log(seed,"seed")
@@ -354,6 +456,44 @@ this.loader=true;
   })
 }
 
+public async joinsplit(){  
+  let data
+  return new Promise((resolve,reject)=>{
+        this.http.get(this.baseurl+'/get_note_hashes').subscribe(res =>{
+          resolve(res)
+               let userPUb_key,user_value;
+        let inputNote =  note.fromViewKey(data.viewKey);
+        console.log("inputNote", inputNote);
+
+        inputNote.owner = data.assetAddress;
+        // console.log("inputNote", inputNote);
+
+        let outputNote1 = note.create(data.publicKey, data.value) //owner balance
+        console.log("outputNote1 viewing key",outputNote1.getView());
+        console.log("outputNote1", outputNote1);
+
+        let outputNote2 = note.create(userPUb_key,user_value) //user asking
+        console.log("outputNote2 viewing key",outputNote2.getView());
+        console.log("outputNote2", outputNote2);
+
+        let senderAddress  //contract address;
+        // console.log("senderAddress", senderAddress);
+
+        let {proofData, signatures} = proof.joinSplit.encodeJoinSplitTransaction({
+            inputNotes: [inputNote],
+            outputNotes: [outputNote1, outputNote2],
+            senderAddress: senderAddress,
+            inputNoteOwners: [""],
+            kPublic:0,
+            publicOwner: "0x0000000000000000000000000000000000000000",
+            validatorAddress: "0xA813a535C180a7656AB812e45Cf695Dc4926aE95" //azk
+        });
+        },err =>{
+          resolve(err)
+        })
+      })
+}
+
   public async ApIlogin2(res){
       
         let response = this.encrypt_server_data(res["data"],this.maticprivatekey)
@@ -459,4 +599,9 @@ this.loader=true;
     return this.getAuth() === null;
     
   }
+  // joinsplit():Promise<any>{
+  //   return new Promise((reslove,reject)=>{
+     
+  //   })as Promise<any>
+  // }
 }
